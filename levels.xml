@@ -1,0 +1,48 @@
+<!--<?xml version="1.0" encoding="UTF-8"?>
+
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<levels>
+        <level id="0">
+            <grid >test</grid>
+            </level>
+        <level id="1">
+            <grid >0_0</grid>
+            <grid >6_0</grid>
+            <grid >12_0</grid>
+            <box>5_5</box>
+        </level>
+        <level id="2">
+            <grid >0_5</grid>
+            <grid>13_0</grid>
+            <grid >13_5</grid>
+            <grid >5_9</grid>
+            <grid >9_9</grid>
+            <box>5_5</box>
+            <box>6_5</box>
+        </level>
+        <level id="3">
+            <grid >13_9</grid>
+            <grid >5_9</grid>
+            <box>5_5</box>
+            <box>6_6</box>
+            <box>7_7</box>
+        </level>
+        <level id="4">
+            <grid >13_7</grid>
+            <grid >0_0</grid>
+            <box>2_5</box>
+            <box>3_1</box>
+            <box>4_7</box>
+        </level>
+        <level id="5">
+            <grid >13_7</grid>
+            <grid >0_0</grid>
+            <box>2_5</box>
+            <box>3_1</box>
+            <box>4_7</box>
+        </level>
+</levels>
+
