@@ -51,22 +51,38 @@ tr, td {
     alignment-adjust: middle;
     text-align: center;
     overflow: hidden; 
-    border: 1px lightgray dotted;
+    //border: 1px lightgray dotted;
 }
 
 .outer {
-    background-color: orange;
-    color: white;
+    background-image:url('pics/redbutton.png');
+    background-size:100% 100%;
+    //background-color: orange;
+    
+  //   background: -webkit-linear-gradient(bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) 60%, #222222 61%, #222222 100%);
+  //background: -o-linear-gradient(bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) 60%, #222222 61%, #222222 100%);
+  //background: -ms-linear-gradient(bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) 60%, #222222 61%, #222222 100%);
+  //background: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) 60%, #222222 61%, #222222 100%);
+  //background: -moz-linear-gradient(bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0));
 }
 
 .laser {
     color:white;
-    background-color: blue;
+    //background-color: blue;
+    background-image:url('pics/x.png');
+     background-size:100% 100%;
 }
 
 .avatar {
-    background-color: black;
-    color: white;
+    //background-color: black;
+    background-image: url('pics/Gun.png'), url('pics/redbutton.png');
+    //background-position: 0 0, 0 0;
+     //background:url('pics/Gun.png');
+     
+     //background-size:100% 100%,100% 100%;
+     background-size:40px 30px,100% 100%;
+     background-repeat:no-repeat;
+    background-position: center;
 }
 
 #thing {
@@ -74,15 +90,41 @@ tr, td {
     height: 15px;
     width: 15px;
     transition: left 1s ease-in, top 1s ease-in;
+
+}
+
+
+
+.hit {
+    //background-color: red;
+}
+
+
+
+
+.remove {
+    background-image:url('pics/blackbutton.png');
+    background-size:100% 100%;
+    position: relative;
+}
+
+.inner {
+    //background-color: transparent;
+    background-image:url('pics/blackbutton.png');
+    background-size:100% 100%;
+    position: relative;
+	z-index: -1;
+
 }
 
 .unHit {
-    background-color: gray;
+
+    //background-color: red;
+        background-image:url('pics/smallBox.png'),url('pics/blackbutton.png');
+     background-size:40px 25px,100% 100%;
+     background-repeat:no-repeat;
+    background-position: center;
+
+
 }
 
-.hit {
-    background-color: red;
-}
-.remove {
-    background-color: transparent;
-}

@@ -13,6 +13,7 @@ and open the template in the editor.
             <grid >6_0</grid>
             <grid >12_0</grid>
             <box>5_5</box>
+            <pic id="1_1">pics/money1.gif</pic>
         </level>
         <level id="2">
             <grid >0_5</grid>

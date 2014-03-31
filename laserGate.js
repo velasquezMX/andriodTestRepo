@@ -1,4 +1,4 @@
-/* 
+    /* 
  * @ABroadwell
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -21,6 +21,10 @@ var avatarY;
 var avatarIsPlaced = false;
 var shooting = false;
 menu();
+// picture
+var pic;
+var moneyPicId = new Array(); //gets an array of money pics
+var moneyBox = new Array();
 //sets up the game grid 
 //puts id's for outer and locations to be used when shooting to test if avatar and laser are in the same row/col
 
@@ -60,7 +64,7 @@ function game() {
                     document.write("<td id= '" + i.toString() + "_" + j.toString() + "' class = 'outer bottom'></td>");
                 }
                 else {
-                    document.write("<td id= '" + i.toString() + "_" + j.toString() + "'></td>");
+                    document.write("<td id= '" + i.toString() + "_" + j.toString() + "'class = 'inner'></td>");
                 }
             }
         }
@@ -103,10 +107,10 @@ level();
     function level() {
         //place lasers
         laserIds = loadLevel(gameLevel);
-        
-        
         //$("#0_0").text("L").addClass("laser");
-        //$("#6_0").text("L").addClass("laser");
+        $("#" + moneyPicId[0]).html("<img src='"+ pic + "' >");
+        var box4 = new Box(moneyPicId[0]);
+        box4.draw(box4.getId());
         //$("#3_" + numCols + "").text("L").addClass("laser");
         //$("#" + numRows + "_10").text("L").addClass("laser");
          for (i = 0; i < laserIds.length; i++) { //removes the class attribute before next level
@@ -146,7 +150,9 @@ level();
         //} 
 
         //set avatar location
+                
         $("#" + avatar + "").addClass("avatar");
+        
         var pos = getElementPosition(avatar);
         console.log("position " + pos.left + "  " + pos.top);
         avatarX = pos.left + cellWidth;
@@ -167,7 +173,7 @@ level();
         var element = document.getElementById(id);
         var top = 0;
         var left = 0;
-
+         
         while (element.tagName !== "BODY") {
             top += element.offsetTop;
             left += element.offsetLeft;
@@ -190,13 +196,15 @@ level();
                     var yPosition = position.top + cellHeight;
                     $("#whereami").text("Current Location: " + xPosition + ", " + yPosition);
                     $("#whereami").text("shooting: " + shooting);
-
+                    
+                    
+                    
                     if ($(this).hasClass("laser") && avatarIsPlaced) {
                         if (checkLocation(currentPosition)) {
                             shooting = true;
                             $("#thing").show();
                             $("#whereami").text("shooting: " + shooting);
-
+                            
                             //Shoot!
                             var theThing = document.getElementById("thing");
                             theThing.style.transition = "left 1s ease-in, top 1s ease-in";
@@ -223,6 +231,7 @@ level();
                                     yOverlap = collides(boxDim.top, thingTop, thingBottom) || collides(thingTop, boxDim.top, boxDim.bottom);
                                     if (xOverlap && yOverlap) {
                                         $("#" + box.getId() + "").addClass("remove");
+                                        $("#" + box.getId() + "").removeClass("unHit");
                                         boxes.splice(i, 1);
                                     }
                                 }
@@ -345,6 +354,11 @@ function getSiblings(grid, n) {  //returns an array of the siblings
             i++;
             boxIds[boxNum] = y.childNodes[0].nodeValue;
             boxNum++;
+        }
+        if(y.nodeType != 0 && y.nodeName=='pic'){
+            pic = y.childNodes[0].nodeValue;
+            moneyPicId[0] = y.attributes.getNamedItem("id").value;
+
         }
         y = get_nextSibling(y);
     }
