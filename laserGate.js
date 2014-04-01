@@ -1,45 +1,49 @@
-    /* 
+/* 
  * @ABroadwell
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-//C:\Users\velasquez\Documents\GitHub\grid\LaserGateGrid\public_html
+
 //Initialize num of rows and cols to use as the game grid
 var numCols = 9;
 var numRows = 13;
-//Xml stuff
-var laserIds = new Array(); // and array of the Lasers. seemed easier to keep the array global
-var boxIds = new Array();
-x = loadXMLDoc("levels.xml"); //loading the xml document
-var gameLevel; // this is for selecting a level in the main starting menu
-var boxes = new Array();
+
 //set avatar location to be in the center of the bottom row
 var avatar = numRows.toString() + "_" + Math.floor(numCols / 2).toString();
 var avatarX;
 var avatarY;
 var avatarIsPlaced = false;
 var shooting = false;
-menu();
-// picture
-var pic;
-var moneyPicId = new Array(); //gets an array of money pics
-var moneyBox = new Array();
+var boxes = new Array();
+
+//show users what levels are open to them and which ones are not
+var unlocked = 1;
+if(localStorage.getItem("unlockedLevels")) {
+    unlocked = localStorage.getItem("unlockedLevels");
+    
+}; 
+
+
+//code goes to menu function first
+startScreen();
+
+
 //sets up the game grid 
 //puts id's for outer and locations to be used when shooting to test if avatar and laser are in the same row/col
-
-function game() {
-    document.write('<link rel="stylesheet" type="text/css" href="laserGate.css"/><img id="thing" src="http://1.bp.blogspot.com/-VfEiU_WCC0Q/UInN6IcUTDI/AAAAAAAAAH0/HRik5VIq7Y4/s1600/b001.png"><h1 id="test">Laser Gate</h1><div class="laserGate"><table id="grid" border="0" cellspacing = "0" cellpadding = "0" id="a" align = "center">');
-    $("#thing").hide();
+function game(level) {
+    var id = level;
+    document.write('<link rel="stylesheet" type="text/css" href="laserGate.css"/><img id="thing" src="http://1.bp.blogspot.com/-VfEiU_WCC0Q/UInN6IcUTDI/AAAAAAAAAH0/HRik5VIq7Y4/s1600/b001.png"><div class="laserGate"><table id="grid" border="0" cellspacing = "0" cellpadding = "0" id="a" align = "center">');
+//    $("#thing").hide();
     for (i = 0; i <= numRows; i++) {
         document.write("<tr class='row" + i + "'>");
         for (j = 0; j <= numCols; j++) {
             if (j === 0) {
                 if (i === 0) {
-                    document.write("<td id= '" + i.toString() + "_" + j.toString() + "' class='outer left corner'></td>");
+                    document.write("<td id= '" + i.toString() + "_" + j.toString() + "' class='outer top left corner'></td>");
                 }
                 else if (i === numRows) {
-                    document.write("<td id= '" + i.toString() + "_" + j.toString() + "' class='outer left corner'></td>");
+                    document.write("<td id= '" + i.toString() + "_" + j.toString() + "' class='outer bottom left corner'></td>");
                 }
                 else {
                     document.write("<td id= '" + i.toString() + "_" + j.toString() + "' class = 'outer left '></td>");
@@ -47,10 +51,10 @@ function game() {
             }
             else if (j === numCols) {
                 if (i === 0) {
-                    document.write("<td id= '" + i.toString() + "_" + j.toString() + "' class='outer corner right'></td>");
+                    document.write("<td id= '" + i.toString() + "_" + j.toString() + "' class='outer corner top right'></td>");
                 }
                 else if (i === numRows) {
-                    document.write("<td id= '" + i.toString() + "_" + j.toString() + "' class='outer corner right'></td>");
+                    document.write("<td id= '" + i.toString() + "_" + j.toString() + "' class='outer corner bottom right'></td>");
                 }
                 else {
                     document.write("<td id= '" + i.toString() + "_" + j.toString() + "' class ='outer right'></td>");
@@ -71,7 +75,7 @@ function game() {
         document.write('</tr></div>');
     }
     ;
-    document.write('</table>');
+    document.write('</table><button id="menu" align="center">pause</button>');
 
 
 //get cellWidth and cellHeight to be used in placement and in overlap test
@@ -80,91 +84,54 @@ function game() {
 
     function Box(boxId) {
         this.boxId = boxId;
-//        this.getId = getId;
     }
-        Box.prototype.getId = function() {
-            return this.boxId;
-        };
-        
-        Box.prototype.draw = function(id) {
-            console.log("DRAW " + id);
-            $("#" + id + "").addClass("unHit");
-        };
-        
-        Box.prototype.boxDim = function(id) {
-            var boxPos = getElementPosition(this.getId());
-            return {
-                left: boxPos.left,
-                top: boxPos.top,
-                right: boxPos.left + cellWidth,
-                bottom: boxPos.top + cellHeight
-            };
-        };
-    
+    Box.prototype.getId = function() {
+        return this.boxId;
+    };
 
-//used to mock a level 
-level();
-    function level() {
+    Box.prototype.draw = function(id) {
+        $("#" + id + "").addClass("unHit");
+    };
+
+    Box.prototype.boxDim = function(id) {
+        var boxPos = getElementPosition(this.getId());
+        return {
+            left: boxPos.left,
+            top: boxPos.top,
+            right: boxPos.left + cellWidth,
+            bottom: boxPos.top + cellHeight
+        };
+    };
+
+
+    //used to create the levels
+    gameLevels(id);
+    function gameLevels(id) {
+
         //place lasers
-        laserIds = loadLevel(gameLevel);
-        //$("#0_0").text("L").addClass("laser");
-        $("#" + moneyPicId[0]).html("<img src='"+ pic + "' >");
-        var box4 = new Box(moneyPicId[0]);
-        box4.draw(box4.getId());
-        //$("#3_" + numCols + "").text("L").addClass("laser");
-        //$("#" + numRows + "_10").text("L").addClass("laser");
-         for (i = 0; i < laserIds.length; i++) { //removes the class attribute before next level
-                $("#" + laserIds[i]).empty("laser").removeClass("laser");
-            }
-            //laserIds = loadLevel(NEWLEVEL++); // this goes to the loadLevel funciton down below
-            // NEWLEVEL is used to find the XML tag in the NEWLEVEL index. for example 0 will find the first
-            // instance of grid tags to be used and so forth. 
-            for (i = 0; i < laserIds.length; i++) {
-                $("#" + laserIds[i]).text("L").addClass("laser");
-            }
-      /*  //place boxes
-        //boxes is an array of box objects 
-        var box0 = new Box("2_4");
-  /*      boxes[0] = box0;
-        var box1 = new Box("6_2");
-        boxes[1] = box1;
-        var box2 = new Box("8_7");
-        boxes[2] = box2;
-        var box3 = new Box("7_7");
-        boxes[3] = box3;
-        var box4 = new Box("4_4");
-        boxes[4] = box4;
-        console.log("BOXES " + boxes[0].getId);
-*/      
-    
-        for (var i = 0; i< boxIds.length;i++){
-
-            var box = new Box(boxIds[i]);
-            boxes[i] = box;
-            box.draw(box.getId());
- 
+        for (var i = 0; i < levels.level[id].laser.length; i++) {
+            console.log(levels.level[id].laser[i].position);
+            $("#" + levels.level[id].laser[i].position).text("L").addClass("laser");
         }
-     //   for (var i = 0; i < boxes.length; i++) {
-       //     var box = boxes[i];
-         //   box.draw(box.getId);
-        //} 
+        ;
+
+        //place boxes
+        //boxes is an array of box objects 
+        for (var j = 0; j < levels.level[id].box.length; j++) {
+            boxes[j] = new Box(levels.level[id].box[j].position);
+            var box = boxes[j];
+            box.draw(box.getId());
+        }
+        ;
 
         //set avatar location
-                
+        //  TODO abstraction for avatar and thing
+        // give avatar id of grid location and move avatar and thing
         $("#" + avatar + "").addClass("avatar");
-        
         var pos = getElementPosition(avatar);
-        console.log("position " + pos.left + "  " + pos.top);
-        avatarX = pos.left + cellWidth;
-        avatarY = pos.top + cellHeight;
-        console.log("avatar location " + avatarX + "   " + avatarY);
-        $("#thing").css({
-            left: avatarX,
-            top: avatarY
-        });
-
+        avatarX = setXLocation(avatar, pos);
+        avatarY = setYLocation(avatar, pos);
         avatarIsPlaced = true;
-        $("#thing").show();
     }
 
 //used to get element position 
@@ -173,7 +140,7 @@ level();
         var element = document.getElementById(id);
         var top = 0;
         var left = 0;
-         
+
         while (element.tagName !== "BODY") {
             top += element.offsetTop;
             left += element.offsetLeft;
@@ -192,29 +159,43 @@ level();
                     //get top and left coordinates of the new clicked position
                     var currentPosition = $(this).attr("id");
                     var position = getElementPosition(currentPosition);
-                    var xPosition = position.left + cellWidth;
-                    var yPosition = position.top + cellHeight;
-                    $("#whereami").text("Current Location: " + xPosition + ", " + yPosition);
-                    $("#whereami").text("shooting: " + shooting);
-                    
-                    
-                    
+
+                    //set appropriate x and y coordinates of the new position
+                    var xPosition = setXLocation(this, position);
+                    var yPosition = setYLocation(this, position);
+
                     if ($(this).hasClass("laser") && avatarIsPlaced) {
                         if (checkLocation(currentPosition)) {
                             shooting = true;
-                            $("#thing").show();
-                            $("#whereami").text("shooting: " + shooting);
-                            
-                            //Shoot!
+
+                            //fetch avatar location again just to be sure screen wasn't resized
+                            var temp = getElementPosition(avatar);
+                            avatarX = temp.left == avatarX ? avatarX : setXLocation(avatar, temp);
+                            avatarY = temp.top == avatarY ? avatarY : setYLocation(avatar, temp);
+
+                            //set the thing to avatar location on a zero transition speed
                             var theThing = document.getElementById("thing");
-                            theThing.style.transition = "left 1s ease-in, top 1s ease-in";
+                            theThing.style.transition = "left 0s ease-in, top 0s ease-in";
+                            theThing.style.left = avatarX;
+                            theThing.style.top = avatarY;
+//                            
+                            //make the thing visible and change transition speed back to 1s
+                            setTimeout(function() {
+//                                var theThing = document.getElementById("thing");
+                                theThing.style.visibility = "visible";
+                                theThing.style.transition = "left 1s ease-in, top 1s ease-in";
+                            }, 1);
 
-                            var theThing = document.querySelector("#thing");
-                            theThing.style.left = xPosition + "px";
-                            theThing.style.top = yPosition + "px";
+                            //set new location of the thing, in which it will show the transition to get there
 
-                            //check for any collisions 
+                            setTimeout(function() {
+                                var theThing = document.querySelector("#thing");
+                                theThing.style.left = xPosition + "px";
+                                theThing.style.top = yPosition + "px";
+                            }, 1);
+                            
 
+                            //check for collisions with box objects
                             var testCollision = setInterval(function() {
                                 //get the necessary location of the thing at that moment
                                 var thingEl = document.getElementById("thing");
@@ -223,36 +204,46 @@ level();
                                 var thingTop = thingPosition.top;
                                 var thingRight = thingLeft + thingEl.width;
                                 var thingBottom = thingTop + thingEl.height;
+
                                 //test if the laser collides with any boxes
                                 for (var i = 0; i < boxes.length; i++) {
                                     var box = boxes[i];
                                     var boxDim = box.boxDim(box.getId());
-                                    xOverlap = collides(boxDim.left, thingLeft, thingRight) || collides(thingLeft, boxDim.left, boxDim.right);
-                                    yOverlap = collides(boxDim.top, thingTop, thingBottom) || collides(thingTop, boxDim.top, boxDim.bottom);
+                                    xOverlap = collides(thingLeft, boxDim.left, boxDim.right) || collides(thingLeft, boxDim.right, boxDim.left);
+                                    yOverlap = collides(thingTop, boxDim.top, boxDim.bottom) || collides(thingTop, boxDim.bottom, boxDim.top);
                                     if (xOverlap && yOverlap) {
                                         $("#" + box.getId() + "").addClass("remove");
-                                        $("#" + box.getId() + "").removeClass("unHit");
+                                        $("#" + box.getId() + "").addClass("unhit");
                                         boxes.splice(i, 1);
                                     }
+                                    if(boxes.length === 0){
+                                        var nextLevel = true;
+                                        levels.level[id].won = true;
+                                        console.log(levels.level[id].won);
+                                        id += 1;
+                                        unlocked = parseInt(unlocked);
+                                        if(id === unlocked){ //make sure player does not unlock a level by playing one they already beat
+                                        unlocked += 1;
+                                        localStorage.setItem("unlockedLevels", unlocked);
+                                        };
+                                        menuOverlay(nextLevel, id);
+                                    }
                                 }
-
-                            }, 1.1);
+                            }, 1);
                             setTimeout(function() {
                                 clearInterval(testCollision);
                             }, 1000);
 
-                            //after done shooting, reset the avatar
+                            //after done shooting, hide the thing
+                            //THING ABSTRACTION
                             setTimeout(function() {
-                                $("#thing").hide();
-                                theThing.style.left = avatarX + "px";
-                                theThing.style.top = avatarY + "px";
-                                theThing.style.transition = "left 0s ease-in, top 0s ease-in";
+//                                var theThing = document.getElementById("thing");
+                                theThing.style.visibility = "hidden";
                                 shooting = false;
-                                $("#whereami").text("shooting in timeout: " + shooting);
-                                $("#thing").show();
                             }, 1000);
                         }
                     } else {
+                        //AVATAR ABSTRACTION
                         avatarPlaced = false;
                         shooting = true;
                         $("#" + avatar + "").removeClass("avatar");
@@ -260,24 +251,29 @@ level();
                         avatar = currentPosition;
                         avatarX = xPosition;
                         avatarY = yPosition;
-
-                        $("#thing").hide();
-                        $("#thing").css({
-                            left: avatarX,
-                            top: avatarY,
-                            transition: "left 0s ease-in, top 0s ease-in"
-                        });
                         avatarPlaced = true;
                         shooting = false;
-                        $("#thing").show();
                     }
                 }
             }
             ;
         }
     }
+    function setXLocation(obj, position) {
+        return $(obj).hasClass("left") ?
+                $(obj).hasClass("laser") ? position.left + cellWidth * 2 : position.left + cellWidth * 2 - $("#thing").width() :
+                $(obj).hasClass("right") ? position.left :
+                position.left + cellWidth - $("#thing").width() / 2;
+    }
+
+    function setYLocation(obj, position) {
+        return $(obj).hasClass("top") ?
+                $(obj).hasClass("laser") ? position.top + cellHeight * 2 : position.top + cellHeight * 2 - $("#thing").height() :
+                $(obj).hasClass("bottom") ? position.top :
+                position.top + cellHeight - $("#thing").height() / 2;
+    }
     function collides(value, min, max) {
-        return (value >= min) && (value <= max);
+        return (value >= min - 15) && (value <= max + 15);
     }
     function checkLocation(laser) {
         return ($("#" + laser + "").hasClass("left") && $(".avatar").hasClass("left")) ? false :
@@ -286,154 +282,155 @@ level();
                 ($("#" + laser + "").hasClass("bottom") && $(".avatar").hasClass("bottom")) ? false : true;
     }
 
+    $("#menu").click(function() {
+        menuOverlay(levels.level[level].won, id);
+    });
 
 }
 ;
+
+//a screen that says Laser Gate and has a big button to begin the game
+function startScreen(){
+    document.write('<link rel="stylesheet" type="text/css" href="laserGate.css"/><div class="welcomeScreen"><center><a id="LaserGate"><h1>Laser Gate</h1></a><a href="#" id="welcomeButton" class="myButton">click to begin</a><object id="welcomeSong" data="Pika.mp3"></object><video autoplay loop id="bgVid"><source src="epicVid.webm" type="video/webm"><source src="epicVid.mp4" type="video/mp4"></video></center></div>');
+    $('#welcomeButton').click(function () {
+        document.location.replace('');
+        menu();
+    });
+}
 
 function menu() { //this will bring the user back to the level screen so he can pick the next level
     document.write('<link rel="stylesheet" type="text/css" href="laserGate.css"/><div class="menu"><h1>Laser Gate</h1><table id="selector" cellspacing = "15" cellpadding = "10" id="a" align = "center">');
     var numRows = 6;
     var numColmns = 5;
     var blockId = 1;
+    console.log(unlocked);
     for (i = 0; i < numRows; i++) { //the menu table
         document.write('<tr id="row"' + i + '>');
 
         for (j = 0; j < numColmns; j++) {
-            document.write("<td id= '" + blockId.toString() + "'>" + blockId.toString() + "</td>");
+            if(blockId <= unlocked){
+                document.write("<td id= '" + blockId.toString() + "' class='unlocked'>" + blockId.toString() + "</td>");
+            } else {
+                document.write("<td id= '" + blockId.toString() + "' class='locked'>" + blockId.toString() + "</td>");
+            }
             blockId++;
         }
         ;
         document.write('</tr>');
     }
     ;
-    document.write('</table></div>');
+    document.write('</table><button id="returnWelcome">Back to Welcome</button></div>');
 
     $('#selector td').click(function() { //when you click on a <td> element it will get the id and use that to correlate with the level desired
         var id = $(this).attr('id');
-        gameLevel = id;
-        console.log("go to level " + id + "");
-        $('.menu').html(''); //remove everything
-        $('div').removeClass("menu");
-        game(); //game(id) will be used with a next level function when there is a variety of levels
+        //checks to see if level has been unlocked then allows you to enter game again
+//            console.log("go to level " + id + "");
+        if(id <= unlocked) {
+            console.log("go to level " + id + "");
+            $('.menu').html(''); //remove everything
+            $('div').removeClass("menu");
+            var compLevel = id - 1; //I belive this is needed since the level array starts at 0 but my table will have an ID of 1
+            game(compLevel); //game(id) will be used with a next level function when there is a variety of levels
+        };
+    });
+
+    $('#returnWelcome').click(function() {
+        document.location.replace('');
+        startScreen();
     });
 
 }
 
-//XML stuff
-function loadLevel(n) {
-    levels = x.getElementsByTagName("level"); //returns an array of level tags
-    //levelId = level.getAttributeNode("id").nodeValue; // levelId is the attribute level gets the level Id
-    //grid = x.getElementsByTagName("grid")[0];
-    var level = levels[n]; // selects the nth isntance of the level tag. 
-    grid = get_firstChild(level);
-    //grid = level.childNodes[0];
-    var num = level.childNodes.length;
-    var numChilds = numSiblings(grid, num);
-    var gridId = new Array();
-    gridId = getSiblings(grid, numChilds);
-    return gridId;
-}
-function getSiblings(grid, n) {  //returns an array of the siblings
-    var num = 1;
-    var i = 0;
-    var x = 0;
-    var boxNum = 0;
-    var gridId = new Array();
-    gridId[x] = grid.childNodes[0].nodeValue;
-    y = get_nextSibling(grid);
-    while ((i < n) && (y.nextSibling != null))
-    {
-        if (y.nodeType != 0 && y.nodeName==grid.nodeName) {
-            num++;
-            i++;
-            x++;
-            gridId[x] = y.childNodes[0].nodeValue;
-        }
-        if(y.nodeType != 0 && y.nodeName=='box'){
-            num++;
-            i++;
-            boxIds[boxNum] = y.childNodes[0].nodeValue;
-            boxNum++;
-        }
-        if(y.nodeType != 0 && y.nodeName=='pic'){
-            pic = y.childNodes[0].nodeValue;
-            moneyPicId[0] = y.attributes.getNamedItem("id").value;
-
-        }
-        y = get_nextSibling(y);
+function menuOverlay(won, id){
+    document.write('<div class="menuOverlay"><center><div id="OverlayOptions" align="center"><a id="menuClick" align="center"><h1><u>menu</u></h1></a><br>');
+    document.write('<a id="resume" align="center"><h1><u>resume</u></h1></a><br>');
+    if(won){
+        document.write('<a id="nextLevel" align="center"><h1><u>next level</u></h1></a><br>');
     }
-    return gridId;
-}
+    document.write('<a id="restart" align="center"><h1><u>restart</u></h1></a><br><a id="clearStorage" align="center"><h1><u>clear local storage</u></h1></a></div></center></div>');
+    $('#menuClick').click(function() {
+      //this deletes the game()
+      $('.laserGate').html('');
+      $('#thing').remove();
+      $('div').removeClass('laserGate');
+      //this deletes the menuOverlay
+      $('.menuOverlay').html('');
+      $('div').removeClass('menuOverlay');
+      menu();
+  });
+  
+  $('#nextLevel').click(function() {
+      //this deletes the game()
+      avatar = numRows.toString() + "_" + Math.floor(numCols / 2).toString(); //reset the avatar
+      $('.laserGate').html('');
+      $('#thing').remove();
+      $('div').removeClass('laserGate');
+      //this deletes the menuOverlay
+      $('.menuOverlay').html('');
+      $('div').removeClass('menuOverlay');
+      if(levels.level[id].won){ //fixed bug that if you won a level and went back you couldn't progress to next level until you won again
+          id +=1;
+      }
+      game(id);//will pass in a value that a NEXTLEVEL function will read and change levels with 
+  });
+  
+  $('#resume').click(function() {
+      //this deletes the menuOverlay
+      $('.menuOverlay').html('');
+      $('div').removeClass('menuOverlay');
+  });
+  
+  $('#restart').click(function() {
+      //this deletes the game()
+      avatar = numRows.toString() + "_" + Math.floor(numCols / 2).toString(); //reset the avatar
+      $('.laserGate').html('');
+      $('#thing').remove();
+      $('div').removeClass('laserGate');
+      //this deletes the menuOverlay
+      $('.menuOverlay').html('');
+      $('div').removeClass('menuOverlay');
+      game(id);
+  });
+  
+  $('#clearStorage').click(function() {
+      //this deletes the game()
+      localStorage.clear();
+      $('.laserGate').html('');
+      $('#thing').remove();
+      $('div').removeClass('laserGate');
+      //this deletes the menuOverlay
+      $('.menuOverlay').html('');
+      $('div').removeClass('menuOverlay');
+      menu();
+  });
+      
+  
+};
 
+//json for the levels in the game 
+var levels = {
+    level:
+            [
+                {
+                    won: false,
+                    box: [{position: "2_4"}, {position: "6_2"}, {position: "8_7"}, {position: "7_7"}, {position: "7_2"}, {position: "1_6"}, {position: "2_6"}, {position: "3_6"}, {position: "4_6"}],
+                    laser: [{position: "0_0"}, {position: "6_0"}, {position: "3_9"}, {position: "13_7"}]
+                },
+                {
+                    won: false,
+                    box: [{position: "1_4"}, {position: "6_3"}, {position: "8_8"}, {position: "7_8"}, {position: "7_2"}],
+                    laser: [{position: "1_0"}, {position: "1_9"}, {position: "3_9"}, {position: "13_7"}]
+                },
+                {
+                    won: false,
+                    box: [{position: "2_4"}, {position: "6_2"}, {position: "9_7"}, {position: "10_7"}, {position: "7_2"}],
+                    laser: [{position: "0_4"}, {position: "7_0"}, {position: "0_9"}, {position: "13_7"}]
+                },
+                {
+                    won: false,
+                    box: [{position: "4_2"}, {position: "6_2"}, {position: "5_2"}, {position: "7_2"}, {position: "8_2"}, {position: "9_2"}, {position: "6_4"}, {position: "7_3"}, {position: "5_3"}, {position: "4_7"}, {position: "5_7"}, {position: "6_7"}, {position: "7_7"}, {position: "8_7"}, {position: "9_7"}],
+                    laser: [{position: "0_4"}, {position: "7_0"}, {position: "0_9"}, {position: "13_7"}]
+                },
+            ]
+};
 
-function numSiblings(grid, n) //returns the number of siblings
-{
-    var num = 1;
-    var i = 0;
-    y = grid.nextSibling;
-    while ((i < n) && (y.nextSibling != null))
-    {
-        if (y.nodeType != 1) {
-            num++;
-            i++;
-        }
-        y = y.nextSibling;
-    }
-    return num;
-}
-
-function get_firstChild(n)
-{
-    y = n.firstChild;
-    while (y.nodeType != 1)
-    {
-        y = y.nextSibling;
-    }
-    return y;
-}
-
-
-function get_nextSibling(n)
-{
-    y = n.nextSibling;
-    while (y.nodeType != 1)
-    {
-        if (y.nextSibling == null) {
-            break;
-        }
-        y = y.nextSibling;
-    }
-    return y;
-}
-
-
-function loadXMLDoc(filename)
-{
-    if (window.XMLHttpRequest)
-    {
-        xhttp = new XMLHttpRequest();
-    }
-    else // code for IE5 and IE6
-    {
-        xhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-    xhttp.open("GET", filename, false);
-    xhttp.send();
-    return xhttp.responseXML;
-}
-
-function loadXMLString(txt) //useless
-{
-    if (window.DOMParser)
-    {
-        parser = new DOMParser();
-        xmlDoc = parser.parseFromString(txt, "text/xml");
-    }
-    else // code for IE
-    {
-        xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
-        xmlDoc.async = false;
-        xmlDoc.loadXML(txt);
-    }
-    return xmlDoc;
-}
