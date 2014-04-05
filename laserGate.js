@@ -17,21 +17,27 @@ var avatarIsPlaced = false;
 var shooting = false;
 var boxes = new Array();
 
+//audio initilaization 
+var a = document.createElement('audio');
+a.setAttribute('src', 'Intro.mp3');
+
 //show users what levels are open to them and which ones are not
 var unlocked = 1;
 if(localStorage.getItem("unlockedLevels")) {
     unlocked = localStorage.getItem("unlockedLevels");
-    
 }; 
 
 
 //code goes to menu function first
+init();
 startScreen();
 
 
 //sets up the game grid 
 //puts id's for outer and locations to be used when shooting to test if avatar and laser are in the same row/col
 function game(level) {
+    a.src = 'Game.mp3';
+    a.play();
     var id = level;
     document.write('<link rel="stylesheet" type="text/css" href="laserGate.css"/><img id="thing" src="http://1.bp.blogspot.com/-VfEiU_WCC0Q/UInN6IcUTDI/AAAAAAAAAH0/HRik5VIq7Y4/s1600/b001.png"><div class="laserGate"><table id="grid" border="0" cellspacing = "0" cellpadding = "0" id="a" align = "center">');
 //    $("#thing").hide();
@@ -213,7 +219,6 @@ function game(level) {
                                     yOverlap = collides(thingTop, boxDim.top, boxDim.bottom) || collides(thingTop, boxDim.bottom, boxDim.top);
                                     if (xOverlap && yOverlap) {
                                         $("#" + box.getId() + "").addClass("remove");
-                                        $("#" + box.getId() + "").addClass("unhit");
                                         boxes.splice(i, 1);
                                     }
                                     if(boxes.length === 0){
@@ -291,15 +296,17 @@ function game(level) {
 
 //a screen that says Laser Gate and has a big button to begin the game
 function startScreen(){
-    document.write('<link rel="stylesheet" type="text/css" href="laserGate.css"/><div class="welcomeScreen"><center><a id="LaserGate"><h1>Laser Gate</h1></a><a href="#" id="welcomeButton" class="myButton">click to begin</a><object id="welcomeSong" data="Pika.mp3"></object><video autoplay loop id="bgVid"><source src="epicVid.webm" type="video/webm"><source src="epicVid.mp4" type="video/mp4"></video></center></div>');
-    $('#welcomeButton').click(function () {
+    document.write('<link rel="stylesheet" type="text/css" href="laserGate.css"/><div class="welcomeScreen"><center><a id="LaserGate"><h1>Laser Gate</h1></a><a href="#" id="welcomeButton" class="myButton">click to begin</a></center></div>');
+    init();
+    a.play();
+    $('#welcomeButton').on('click touchstart',function () {
         document.location.replace('');
         menu();
     });
 }
 
 function menu() { //this will bring the user back to the level screen so he can pick the next level
-    document.write('<link rel="stylesheet" type="text/css" href="laserGate.css"/><div class="menu"><h1>Laser Gate</h1><table id="selector" cellspacing = "15" cellpadding = "10" id="a" align = "center">');
+    document.write('<link rel="stylesheet" type="text/css" href="laserGate.css"/><div class="menu"><h1><strong>Laser Gate</strong></h1><table id="selector" cellspacing = "15" cellpadding = "10" id="a" align = "center">');
     var numRows = 6;
     var numColmns = 5;
     var blockId = 1;
@@ -330,6 +337,7 @@ function menu() { //this will bring the user back to the level screen so he can 
             $('.menu').html(''); //remove everything
             $('div').removeClass("menu");
             var compLevel = id - 1; //I belive this is needed since the level array starts at 0 but my table will have an ID of 1
+            a.pause();
             game(compLevel); //game(id) will be used with a next level function when there is a variety of levels
         };
     });
@@ -342,12 +350,13 @@ function menu() { //this will bring the user back to the level screen so he can 
 }
 
 function menuOverlay(won, id){
-    document.write('<div class="menuOverlay"><center><div id="OverlayOptions" align="center"><a id="menuClick" align="center"><h1><u>menu</u></h1></a><br>');
-    document.write('<a id="resume" align="center"><h1><u>resume</u></h1></a><br>');
+    a.pause();
+    document.write('<div class="onTop"><div class="menuOverlay"><center><div id="OverlayOptions" align="center"><a class="onTop" id="menuClick" align="center"><h1><u>menu</u></h1></a><br>');
+    document.write('<a class="onTop" id="resume" align="center"><h1><u>resume</u></h1></a><br>');
     if(won){
-        document.write('<a id="nextLevel" align="center"><h1><u>next level</u></h1></a><br>');
+        document.write('<a class="onTop" id="nextLevel" align="center"><h1><u>next level</u></h1></a><br>');
     }
-    document.write('<a id="restart" align="center"><h1><u>restart</u></h1></a><br><a id="clearStorage" align="center"><h1><u>clear local storage</u></h1></a></div></center></div>');
+    document.write('<a class="onTop" id="restart" align="center"><h1><u>restart</u></h1></a><br><a class="onTop" id="clearStorage" align="center"><h1><u>clear local storage</u></h1></a></div></center></div></div>');
     $('#menuClick').click(function() {
       //this deletes the game()
       $('.laserGate').html('');
@@ -412,25 +421,65 @@ var levels = {
     level:
             [
                 {
+                    //level 1
                     won: false,
                     box: [{position: "2_4"}, {position: "6_2"}, {position: "8_7"}, {position: "7_7"}, {position: "7_2"}, {position: "1_6"}, {position: "2_6"}, {position: "3_6"}, {position: "4_6"}],
                     laser: [{position: "0_0"}, {position: "6_0"}, {position: "3_9"}, {position: "13_7"}]
                 },
                 {
+                    //level 2
                     won: false,
                     box: [{position: "1_4"}, {position: "6_3"}, {position: "8_8"}, {position: "7_8"}, {position: "7_2"}],
                     laser: [{position: "1_0"}, {position: "1_9"}, {position: "3_9"}, {position: "13_7"}]
                 },
                 {
+                    //level 3
                     won: false,
                     box: [{position: "2_4"}, {position: "6_2"}, {position: "9_7"}, {position: "10_7"}, {position: "7_2"}],
                     laser: [{position: "0_4"}, {position: "7_0"}, {position: "0_9"}, {position: "13_7"}]
                 },
                 {
+                    //level 4
                     won: false,
                     box: [{position: "4_2"}, {position: "6_2"}, {position: "5_2"}, {position: "7_2"}, {position: "8_2"}, {position: "9_2"}, {position: "6_4"}, {position: "7_3"}, {position: "5_3"}, {position: "4_7"}, {position: "5_7"}, {position: "6_7"}, {position: "7_7"}, {position: "8_7"}, {position: "9_7"}],
                     laser: [{position: "0_4"}, {position: "7_0"}, {position: "0_9"}, {position: "13_7"}]
-                },
+                }
             ]
 };
+
+function touchHandler(event) //needed for iPhone touch events
+{
+    var touches = event.changedTouches,
+        first = touches[0],
+        type = "";
+
+    switch(event.type)
+    {
+       case "touchstart": type = "mousedown"; break;
+       case "touchmove":  type = "mousemove"; break;        
+       case "touchend":   type = "mouseup"; break;
+       default: return;
+    }
+
+    //initMouseEvent(type, canBubble, cancelable, view, clickCount, 
+    //           screenX, screenY, clientX, clientY, ctrlKey, 
+    //           altKey, shiftKey, metaKey, button, relatedTarget);
+
+    var simulatedEvent = document.createEvent("MouseEvent");
+    simulatedEvent.initMouseEvent(type, true, true, window, 1, 
+                          first.screenX, first.screenY, 
+                          first.clientX, first.clientY, false, 
+                          false, false, false, 0/*left*/, null);
+
+    first.target.dispatchEvent(simulatedEvent);
+    event.preventDefault();
+}
+
+function init() 
+{
+    document.addEventListener("touchstart", touchHandler, true);
+    document.addEventListener("touchmove", touchHandler, true);
+    document.addEventListener("touchend", touchHandler, true);
+    document.addEventListener("touchcancel", touchHandler, true);    
+}
 

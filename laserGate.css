@@ -12,9 +12,10 @@ and open the template in the editor.
     padding: 0;
     margin-left: auto;
     margin-right: auto;
+    width:100%;
 }
 
-html, body {
+html, body{
     overflow: hidden;
     height: 100%;
     width: 100%;
@@ -22,18 +23,18 @@ html, body {
 }
 
 table {
-
-    height: 97.5%; 
+    height: 97%; 
+    width: 100%;
     table-layout: fixed;
     overflow: hidden;
 }
 
 h1 {
     color: blue;
-    font-size: 20px;
+    font-size: 30px;
     vertical-align: middle;
     text-align: center;
-
+    font-family: monospace;
 }
 #whereami {
     color: blue;
@@ -43,7 +44,7 @@ h1 {
 
 tr, td {
     height: 30px;
-    width: 50px;
+    width: 30px;
     alignment-adjust: middle;
     text-align: center;
     overflow: hidden; 
@@ -59,17 +60,17 @@ tr, td {
 }
 
 .laser {
+    background-image:url('pics/oval2.png');
+    background-size:100% 100%;
     color:white;
-    background-color: blue;
+    background-color: red;
 }
 
 .avatar {
-    //background-color: black;
     background-image: url('pics/Gun.png'), url('pics/redbutton.png');
     background-size:40px 30px,100% 100%;
      background-repeat:no-repeat;
     background-position: center;
-    //color: white;
 }
 
 #thing {
@@ -90,31 +91,23 @@ tr, td {
 
 }
 
-
 .unHit {
     //background-color: gray;
    // border: 1px lightgray solid;
+    background-image:url('pics/smallBox.png');
+     background-size:120px 60px;
+     background-repeat:no-repeat;
+    background-position: center;
     /*    background: url('http://www.carrhagerman.com/wp-content/uploads/2012/11/blue-balloon-199x300.jpg') 6px 6px;
         background-size: 25px 35px;
         background-repeat: no-repeat;
         background-position: center;*/
-    background-image:url('pics/smallBox.png'),url('pics/blackbutton.png');
-     background-size:40px 25px,100% 100%;
-     background-repeat:no-repeat;
-    background-position: center;
- 
 }
 
 .remove {
-    //background-color: transparent;
-    //background-image: none;
-    //border: 1px none;
-    background-color: transparent;
-    background-image:url('pics/blackbutton.png');
-    background-color:red;
-    background-size:100% 100%;
-    //position: relative;
-    z-index: -1;
+    background-color: red;
+    background-image: none;
+    border: 1px none;
 
 }
 
@@ -130,19 +123,32 @@ tr, td {
     z-index: 1000; /* or  greater value */
 }
 
-
 #OverlayOptions {
+    position: relative;
     width: 50%;
     height: 50%;
     margin: auto;
-    margin-top: 5%;
+    margin-top: 15%;
     background: gold;
     opacity: 1;
 }
 
+.onTop {
+    position: relative;
+    opacity: 1.0;
+    z-index: 3000;
+}
+
+a.onTop {
+    position: absolute;
+    opacity: 1.0;
+    z-index: 3000;
+}
+
 #menuClick {
-    padding-top: 10%;
-    position: absolute; //could be a problem
+    //padding-top: 13%;
+    margin-top: 20%;
+    position: relative; //could be a problem
     text-align: center;
     vertical-align: middle;
     z-index: 2000;
@@ -153,39 +159,44 @@ tr, td {
 }
 
 #resume {
-    padding-top: 12%;
-    position: absolute; //could be a problem
+    padding-top: 15%;
+    position: relative; //could be a problem
     text-align: center;
     vertical-align: middle;
     z-index: 1700;
 }
 
 #nextLevel{
-    padding-top: 14%;
-    position: absolute; //could be a problem
+    padding-top: 17%;
+    position: relative; //could be a problem
     text-align: center;
     vertical-align: middle;
     z-index: 1500;
 }
 
 #restart {
-    padding-top: 16%;
-    position: absolute; //could be a problem
+    padding-top: 19%;
+    position: relative; //could be a problem
     text-align: center;
     vertical-align: middle;
     z-index: 1400;
 }
 
 #clearStorage {
-    padding-top: 18%;
-    position: absolute; 
+    padding-top: 21%;
+    position: relative; 
     text-align: center;
     vertical-align: middle;
     z-index: 1300;
 }
 
-#menuClick h1,#nextLevel h1,#resume h1, #restart h1, #clearStorage h1{
+#menuClick h1 {
+    padding-top: 10%;
+}
+
+#menuClick h1,#nextLevel h1,#resume h1, #restart h1, #clearStorage h1{ 
     color: black;
+    margin-top: 5%;
 }
 
 .locked {
@@ -220,16 +231,5 @@ tr, td {
 
 #welcomeButton {
     position: relative;
-}
-
-#welcomeSong {
-    visibility: hidden;
-}
-
-#bgVid {
-    position: fixed; right: 0; bottom: 0;
-    min-width: 100%; min-height: 100%;
-    width: auto; height: auto; 
-    z-index: -100;
 }
 
