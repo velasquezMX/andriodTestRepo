@@ -48,29 +48,26 @@ tr, td {
     alignment-adjust: middle;
     text-align: center;
     overflow: hidden; 
-    border: 1px none;
+    border: 1px solid black;
 }
 
 .outer {
     background-image:url('pics/redbutton.png');
     background-size:100% 100%;
-    background-color: orange;
-    color: white;
-    border: 1px lightgray dotted;
+    //background-color: orange;
+    //color: white;
+    //border: 1px lightgray dotted;
 }
 
 .laser {
-    background-image:url('pics/oval2.png');
-    background-size:100% 100%;
-    color:white;
-    background-color: red;
+    background-image: url('pics/oval2.png');
+    //color:white;
+    //background-color: blue;
 }
 
 .avatar {
-    background-image: url('pics/Gun.png'), url('pics/redbutton.png');
-    background-size:40px 30px,100% 100%;
-     background-repeat:no-repeat;
-    background-position: center;
+   // background-color: black;
+    //color: white;
 }
 
 #thing {
@@ -79,35 +76,45 @@ tr, td {
     width: 15px;
     transition: left 1s ease-in, top 1s ease-in;
     visibility: hidden;
-}
-
-.inner {
-    background-color: transparent;
-    background-image:url('pics/blackbutton.png');
-    background-color:red;
-    background-size:100% 100%;
-    //position: relative;
-    z-index: -1;
-
+    z-index: 5;
 }
 
 .unHit {
+    background-image: url('pics/brickLarge.png');
+    background-size: 100% 100%;
     //background-color: gray;
-   // border: 1px lightgray solid;
-    background-image:url('pics/smallBox.png');
-     background-size:120px 60px;
-     background-repeat:no-repeat;
+    border: 1px lightgray solid;
+
+    z-index: 1;
+    
+}
+.hit2 {
+    background-image: url('pics/crackedSteel.png');
+    background-size: 100% 100%;
+    background-color: darkgray;
+    border: 1px solid black;
+}
+
+.hit3 {
+    background-image: url('pics/steel.png');
+    background-size: 100% 100%;
+    background-color: black;
+    border: 1px solid black;
+    
+}
+.deathBox {
+    background-image: url('pics/skull.png');
+    background-size: 30px 40px;
+    background-repeat: no-repeat;
     background-position: center;
-    /*    background: url('http://www.carrhagerman.com/wp-content/uploads/2012/11/blue-balloon-199x300.jpg') 6px 6px;
-        background-size: 25px 35px;
-        background-repeat: no-repeat;
-        background-position: center;*/
+    background-color: black;
+    border: 2px solid gold;
 }
 
 .remove {
-    background-color: red;
+    background-color: transparent;
     background-image: none;
-    border: 1px none;
+    border: 1px solid black;
 
 }
 
@@ -137,6 +144,15 @@ tr, td {
     position: relative;
     opacity: 1.0;
     z-index: 3000;
+}
+
+#score {
+    position: fixed;
+    top: 2.3%;
+    right: -91%;
+    z-index: 3000;
+    font-size: 1.25em;
+    color: white;
 }
 
 a.onTop {
@@ -182,13 +198,6 @@ a.onTop {
     z-index: 1400;
 }
 
-#clearStorage {
-    padding-top: 21%;
-    position: relative; 
-    text-align: center;
-    vertical-align: middle;
-    z-index: 1300;
-}
 
 #menuClick h1 {
     padding-top: 10%;
@@ -224,12 +233,77 @@ a.onTop {
     font-family:Verdana;
     font-size:20px;
     font-weight:bold;
-    padding: 16px 76px;
     text-decoration:none;
     text-shadow:-2px 2px 8px #Ff6627;
+    bottom: 15%;
+    top: 20%;
 }
 
 #welcomeButton {
-    position: relative;
+    top: 30px;
 }
 
+#clearStorage {
+    top: 70px;
+}
+
+.tankLeft{
+    background-image:url('pics/tankLeft.png'),url('pics/redButton.png');
+    background-size: 30px 20px,100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.tankRight{
+    background-image:url('pics/tankRight.png'),url('pics/redButton.png');
+    background-size: 30px 20px,100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.tankTop{
+    background-image:url('pics/tankUp.png'),url('pics/redButton.png');
+    background-size: 30px 20px,100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.tankBottom{
+    background-image:url('pics/tankDown.png'),url('pics/redButton.png');
+    background-size: 30px 20px,100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.tankUpperLeft{
+    background-image:url('pics/tankUpperLeft.png'),url('pics/redButton.png');
+    background-size: 30px 20px,100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.tankUpperRight{
+    background-image:url('pics/tankUpperRight.png'),url('pics/redButton.png');
+    background-size: 30px 20px,100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.tankLowerLeft{
+    background-image:url('pics/tankLowerLeft.png'),url('pics/redButton.png');
+    background-size: 30px 20px,100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.tankLowerRight{
+    background-image:url('pics/tankLowerRight.png'),url('pics/redButton.png');
+    background-size: 30px 20px,100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.inner{
+
+    z-index: -500;
+}
