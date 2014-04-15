@@ -44,19 +44,23 @@ h1 {
 
 tr, td {
     height: 30px;
-    width: 30px;
+    width: 28px;
     alignment-adjust: middle;
     text-align: center;
     overflow: hidden; 
-    border: 1px solid black;
+/*    border: 1px solid black;*/
 }
 
 .outer {
     background-image:url('pics/redbutton.png');
-    background-size:100% 100%;
+    background-size: 200% 200%;
     //background-color: orange;
     //color: white;
     //border: 1px lightgray dotted;
+    background-repeat: no-repeat;
+    background-position: center;
+        border: 2px dotted black;
+
 }
 
 .laser {
@@ -66,7 +70,7 @@ tr, td {
 }
 
 .avatar {
-   // background-color: black;
+    // background-color: black;
     //color: white;
 }
 
@@ -76,47 +80,60 @@ tr, td {
     width: 15px;
     transition: left 1s ease-in, top 1s ease-in;
     visibility: hidden;
-    z-index: 5;
+    z-index: 1;
 }
 
 .unHit {
     background-image: url('pics/brickLarge.png');
     background-size: 100% 100%;
-    //background-color: gray;
-    border: 1px lightgray solid;
+    background-color: green;
+    z-index: 10;
 
-    z-index: 1;
-    
 }
 .hit2 {
     background-image: url('pics/crackedSteel.png');
     background-size: 100% 100%;
-    background-color: darkgray;
-    border: 1px solid black;
+    background-color: black;
+    z-index: 10;
+
 }
 
 .hit3 {
     background-image: url('pics/steel.png');
     background-size: 100% 100%;
     background-color: black;
-    border: 1px solid black;
-    
+    z-index: 10;
+
+
 }
 .deathBox {
     background-image: url('pics/skull.png');
-    background-size: 30px 40px;
+    background-size: 100% 100%;
     background-repeat: no-repeat;
     background-position: center;
     background-color: black;
-    border: 2px solid gold;
+    z-index: 10;
 }
 
 .remove {
     background-color: transparent;
     background-image: none;
-    border: 1px solid black;
-
 }
+
+.helpOverlay{
+     position:fixed;
+     margin: auto; 
+     top:0; 
+     left:0; 
+    width:100%;
+    height: 100%;
+    background: grey;
+    opacity: 0.7;
+    z-index: 500; /* or  greater value */
+     padding: 10%; 
+}
+
+
 
 .menuOverlay{
     position:fixed; /*or  absolute*/
@@ -126,8 +143,50 @@ tr, td {
     width:100%;
     height: 100%;
     background: grey;
-    opacity: .5;
+    opacity: 0.7;
     z-index: 1000; /* or  greater value */
+}
+
+div.helpOptions {
+    font-size: 80%;
+    display: inline-block;
+    width: 63%;
+    height: 63%;
+    left: 10%;
+    top: 9%;
+    position: absolute; 
+    vertical-align: center;
+    text-shadow: 0px 0px 1px white;
+    z-index: 1500;
+    background-color: white;
+    opacity: 1;
+}
+ol, li {
+    overflow-wrap: break-word;
+    width: 87%;
+    height: 40%;
+    font-size: 111%;
+}
+
+div.helpingTheHelp{
+    position: relative;
+    width: 60%;
+    height: 60%;
+     left: 23%; 
+    position: absolute;
+     margin: auto; 
+     margin-top: 10%; 
+    background-color: white;
+    z-index: 1400;
+}
+
+#startLevel{
+    top: 50px;
+    font-size: 215%;
+    color: darkblue;
+    text-decoration:none;
+    text-shadow:-2px 2px 8px #Ff6627;
+    position: relative;
 }
 
 #OverlayOptions {
@@ -136,7 +195,7 @@ tr, td {
     height: 50%;
     margin: auto;
     margin-top: 15%;
-    background: gold;
+    background: white;
     opacity: 1;
 }
 
@@ -144,15 +203,6 @@ tr, td {
     position: relative;
     opacity: 1.0;
     z-index: 3000;
-}
-
-#score {
-    position: fixed;
-    top: 2.3%;
-    right: -91%;
-    z-index: 3000;
-    font-size: 1.25em;
-    color: white;
 }
 
 a.onTop {
@@ -247,63 +297,107 @@ a.onTop {
     top: 70px;
 }
 
+div#scoreBar {
+    display: inline-block;
+    height: 10%;
+}
+
+div#scoreBar div#button {
+    display: inline-block;
+    height: 100%;
+    width: 20%;
+}
+
+div#scoreBar div#score-header {
+    display: inline-block;
+    height: 100%;
+    width: 80%;
+    position: absolute;
+    right: .5%;
+}
+
+#score {
+    z-index: 3000;
+    font-size: 1.1em;
+    color: black;
+    text-align: right;
+    padding-right: 20px;
+}
+
+button {
+    width: 75%;
+    text-align: center;
+}
+
+#menu {
+    margin-top: .5%;
+}
+
 .tankLeft{
-    background-image:url('pics/tankLeft.png'),url('pics/redButton.png');
-    background-size: 30px 20px,100% 100%;
+    background-image:url('pics/tankLeft.png'),url('pics/redbutton.png');
+    background-size: 90% 90%,200% 200%;
     background-repeat: no-repeat;
     background-position: center;
 }
 
 .tankRight{
-    background-image:url('pics/tankRight.png'),url('pics/redButton.png');
-    background-size: 30px 20px,100% 100%;
+    background-image:url('pics/tankRight.png'),url('pics/redbutton.png');
+    background-size: 90% 90%,200% 200%;
     background-repeat: no-repeat;
     background-position: center;
 }
 
 .tankTop{
-    background-image:url('pics/tankUp.png'),url('pics/redButton.png');
-    background-size: 30px 20px,100% 100%;
+    background-image:url('pics/tankUp.png'),url('pics/redbutton.png');
+    background-size: 90% 90%,200% 200%;
     background-repeat: no-repeat;
     background-position: center;
 }
 
 .tankBottom{
-    background-image:url('pics/tankDown.png'),url('pics/redButton.png');
-    background-size: 30px 20px,100% 100%;
+    background-image:url('pics/tankDown.png'),url('pics/redbutton.png');
+    background-size: 90% 90%,200% 200%;
     background-repeat: no-repeat;
     background-position: center;
 }
 
 .tankUpperLeft{
-    background-image:url('pics/tankUpperLeft.png'),url('pics/redButton.png');
-    background-size: 30px 20px,100% 100%;
+    background-image:url('pics/tankUpperLeft.png'),url('pics/redbutton.png');
+    background-size: 90% 90%,200% 200%;
     background-repeat: no-repeat;
     background-position: center;
 }
 
 .tankUpperRight{
-    background-image:url('pics/tankUpperRight.png'),url('pics/redButton.png');
-    background-size: 30px 20px,100% 100%;
+    background-image:url('pics/tankUpperRight.png'),url('pics/redbutton.png');
+    background-size: 90% 90%,200% 200%;
     background-repeat: no-repeat;
     background-position: center;
 }
 
 .tankLowerLeft{
-    background-image:url('pics/tankLowerLeft.png'),url('pics/redButton.png');
-    background-size: 30px 20px,100% 100%;
+    background-image:url('pics/tankLowerLeft.png'),url('pics/redbutton.png');
+    background-size: 90% 90%,200% 200%;
     background-repeat: no-repeat;
     background-position: center;
 }
 
 .tankLowerRight{
-    background-image:url('pics/tankLowerRight.png'),url('pics/redButton.png');
-    background-size: 30px 20px,100% 100%;
+    background-image:url('pics/tankLowerRight.png'),url('pics/redbutton.png');
+    background-size: 90% 90%,200% 200%;
     background-repeat: no-repeat;
     background-position: center;
 }
 
 .inner{
-
+    background-image:url('pics/grass.png');
+    background-size: 200% 200%;
+    //background-color: orange;
+    //color: white;
+    //border: 1px lightgray dotted;
+    /*border: 1px solid black;*/
+    background-repeat: no-repeat;
+    background-position: center;
     z-index: -500;
 }
+

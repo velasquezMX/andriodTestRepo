@@ -22,7 +22,17 @@
         The "device" permission is required for the 'deviceready' event.
     -->
     <feature name="http://api.phonegap.com/1.0/device" />
-
+  
+    <gap:plugin name="org.apache.cordova.splashscreen" version="0.2.3" />
+    <feature name="SplashScreen">
+        <param name="ios-package" value="CDVSplashScreen" />
+        <param name="android-package" value="org.apache.cordova.splashscreen.SplashScreen" />
+    </feature>
+    
+    <feature name="Media">
+    <param name="android-package" value="org.apache.cordova.media.AudioHandler" />
+    <param name="ios-package" value="CDVSound" />
+</feature>
 
     <!--
         If you do not want any permissions to be added to your app, add the
@@ -63,11 +73,6 @@
         <false/>
     </gap:config-file>
     
-    <gap:plugin name="org.apache.cordova.splashscreen" version="0.2.7" />
-    <feature name="SplashScreen">
-        <param name="ios-package" value="CDVSplashScreen" />
-        <param name="android-package" value="org.apache.cordova.splashscreen.SplashScreen" />
-    </feature>
     
     <!-- Define app icon for each platform. -->
     <icon src="icon.png" />
