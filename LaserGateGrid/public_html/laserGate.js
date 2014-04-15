@@ -182,6 +182,13 @@ function game(level) {
 
         //set avatar location
         avatar = numRows.toString() + "_" + Math.floor(numCols / 2).toString();
+        $('#5_0').addClass("tankRight");
+        $('#0_0').addClass("tankUpperLeft");
+        $('#0_9').addClass("tankUpperRight");
+        $('#13_0').addClass("tankLowerLeft");
+        $('#13_9').addClass("tankLowerRight");
+        $('#0_6').addClass("tankBottom");
+        $('#3_9').addClass("tankLeft");
         $("#" + avatar + "").addClass("avatar").addClass("tankTop");
         console.log("avatar location " + avatar);
         avatarIsPlaced = true;
@@ -226,11 +233,11 @@ function game(level) {
                             theThing.style.top = avatarY;
 //                          
 //                          //make the pew sound
-                            aTank.play();
-                            setTimeout(function() {
-                                aTank.pause();
-                                aTank.src = 'pew.mp3';
-                            }, 1000);
+                   //         aTank.play();
+                   //         setTimeout(function() {
+                    //            aTank.pause();
+                     //           aTank.src = 'pew.mp3';
+                     //       }, 1000);
 
                             //make the thing visible and change transition speed back to 1s
                             setTimeout(function() {
@@ -353,7 +360,7 @@ function game(level) {
                             $(this).addClass("tankLowerRight");
                         }
                         if (avatar == '13_0') {
-//                            $(this).addClass("tankLowerLeft");
+                            $(this).addClass("tankLowerLeft");
                         }
                         avatarPlaced = true;
                         shooting = false;
