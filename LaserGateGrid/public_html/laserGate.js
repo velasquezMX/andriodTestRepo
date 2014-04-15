@@ -160,7 +160,7 @@ function game(level) {
 
         //place lasers
         for (var i = 0; i < levels.level[id].laser.length; i++) {
-            $("#" + levels.level[id].laser[i].position).text("L").addClass("laser");
+            $("#" + levels.level[id].laser[i].position).addClass("laser");
         }
         ;
 
